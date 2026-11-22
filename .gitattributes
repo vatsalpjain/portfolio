@@ -1,0 +1,8 @@
+# Keep LF line endings everywhere (Prettier expects LF), even on Windows checkouts.
+* text=auto eol=lf
+
+# Binary files: never touch.
+*.png binary
+*.jpg binary
+*.woff binary
+*.woff2 binary
