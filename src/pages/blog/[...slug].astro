@@ -53,7 +53,7 @@ const { Content } = await render(post);
   {(prev || next) && (
     <nav class="pager" aria-label="More posts">
       {prev ? (
-        <a href={`/blog/${prev.id}`}>
+        <a href={`/blog/${prev.id}/`}>
           <span class="lbl">Previous</span>
           {prev.data.title}
         </a>
@@ -61,7 +61,7 @@ const { Content } = await render(post);
         <span />
       )}
       {next && (
-        <a href={`/blog/${next.id}`} class="right">
+        <a href={`/blog/${next.id}/`} class="right">
           <span class="lbl">Next</span>
           {next.data.title}
         </a>

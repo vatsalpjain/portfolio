@@ -15,7 +15,7 @@ const { posts } = Astro.props;
         {formatShortDate(post.data.date)}
       </time>
       <div>
-        <a class="title" href={`/blog/${post.id}`}>
+        <a class="title" href={`/blog/${post.id}/`}>
           {post.data.title}{" "}
           <span class="arrow" aria-hidden="true">
             →

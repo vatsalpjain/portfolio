@@ -34,7 +34,7 @@ const calendar = (await getEntry("contributions", "calendar"))?.data;
     title="Recent work"
     link={
       projects.length > recent.length
-        ? { href: "/projects", label: "All projects" }
+        ? { href: "/projects/", label: "All projects" }
         : undefined
     }
   />

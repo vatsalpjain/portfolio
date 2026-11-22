@@ -21,8 +21,8 @@ export const site = {
 
   nav: [
     { label: "Home", href: "/" },
-    { label: "Projects", href: "/projects" },
-    { label: "Blog", href: "/blog" },
+    { label: "Projects", href: "/projects/" },
+    { label: "Blog", href: "/blog/" },
   ],
 
   // How many projects the Home page shows before linking to /projects.

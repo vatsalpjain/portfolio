@@ -9,7 +9,8 @@ const SITE = "https://vatsaljain.pages.dev";
 export default defineConfig({
   site: SITE,
   output: "static",
-  trailingSlash: "ignore",
+  // Cloudflare Pages serves folders at "/path/", so links use the trailing slash (no redirect hop).
+  trailingSlash: "always",
   // Keep whitespace between inline elements (Astro 7 defaults to 'jsx', which strips it).
   compressHTML: true,
   integrations: [mdx(), sitemap()],

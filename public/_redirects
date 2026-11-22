@@ -1,0 +1,3 @@
+# Cloudflare Pages: serve the standard security.txt location from /security.txt
+# (folders starting with a dot are not uploaded). 200 = rewrite, not redirect.
+/.well-known/security.txt  /security.txt  200

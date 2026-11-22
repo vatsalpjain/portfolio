@@ -1,9 +1,12 @@
 ---
 import { site } from "../site.config";
 
-const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const isCurrent = (href: string) =>
-  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+const trim = (p: string) => p.replace(/\/+$/, "") || "/";
+const path = trim(Astro.url.pathname);
+const isCurrent = (href: string) => {
+  const h = trim(href);
+  return h === "/" ? path === "/" : path === h || path.startsWith(`${h}/`);
+};
 ---
 
 <header class="site-header">
