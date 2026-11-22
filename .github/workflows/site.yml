@@ -43,8 +43,11 @@ jobs:
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
+      # `astro check` syncs content collections, which loads GitHub data, so it needs the token too.
       - name: Type and content check
         run: npm run check
+        env:
+          GH_DATA_TOKEN: ${{ secrets.GH_DATA_TOKEN }}
 
       - name: Formatting
         run: npm run format:check
@@ -66,6 +69,9 @@ jobs:
   deploy:
     name: Deploy to Cloudflare Pages
     needs: build
+    # Dependabot runs can't read the Cloudflare secrets (by GitHub's design), and dependency
+    # bumps don't need a preview: their CI checks are enough.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

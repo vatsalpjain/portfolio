@@ -1,4 +1,6 @@
 # Weekly, grouped dependency updates (decision 0009).
+# Major versions (e.g. TypeScript 7, Astro 8) are skipped here: they can break the build
+# and are upgraded deliberately, by hand, on their own branch.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -8,6 +10,9 @@ updates:
     groups:
       npm:
         patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 3
 
   - package-ecosystem: github-actions
