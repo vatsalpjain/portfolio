@@ -1,0 +1,47 @@
+---
+interface Props {
+  title: string;
+  /** Small sage roman numeral, e.g. "i." */
+  num?: string;
+  link?: { href: string; label: string };
+  /** Heading level; defaults to h2. */
+  as?: "h2" | "h3";
+}
+const { title, num, link, as: Tag = "h2" } = Astro.props;
+---
+
+<div class="section-head reveal">
+  <Tag>
+    {num && <span class="num">{num}</span>}
+    {title}
+  </Tag>
+  {link && <a href={link.href}>{link.label} →</a>}
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-4);
+    border-bottom: 1px solid var(--c-border);
+    padding-bottom: var(--s-2);
+    margin: var(--s-9) 0 var(--s-2);
+  }
+  h2,
+  h3 {
+    margin: 0;
+    font-size: var(--fs-h3);
+  }
+  .num {
+    font-style: italic;
+    color: var(--c-sage-mid);
+    margin-right: 0.45em;
+    font-size: 0.85em;
+  }
+  a {
+    font-size: var(--fs-small);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+</style>

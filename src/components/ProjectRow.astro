@@ -1,0 +1,147 @@
+---
+// One project as an expandable row (decision 0003): native <details>, no JavaScript.
+import type { CollectionEntry } from "astro:content";
+import { formatMonthYear, isoDate } from "../lib/format";
+
+interface Props {
+  project: CollectionEntry<"projects">["data"];
+}
+const { project: p } = Astro.props;
+const year = p.createdAt.getUTCFullYear();
+---
+
+<details class="project">
+  <summary>
+    <span class="year">{year}</span>
+    <span class="head">
+      <span class="name">{p.name}</span>
+      {p.description && <span class="desc">{p.description}</span>}
+    </span>
+    <span class="chev" aria-hidden="true"></span>
+  </summary>
+  <div class="body">
+    {p.summary && <p class="summary">{p.summary}</p>}
+    <p class="facts">
+      {p.language && <span>{p.language}</span>}
+      <span>
+        Updated{" "}
+        <time datetime={isoDate(p.pushedAt)}>
+          {formatMonthYear(p.pushedAt)}
+        </time>
+      </span>
+      {p.stars > 0 && <span>★ {p.stars}</span>}
+    </p>
+    <p class="links">
+      <a href={p.url}>GitHub ↗</a>
+      {p.homepage && <a href={p.homepage}>Live demo ↗</a>}
+    </p>
+  </div>
+</details>
+
+<style>
+  .project {
+    border-bottom: 1px solid var(--c-border);
+  }
+  summary {
+    display: grid;
+    grid-template-columns: 4.5em minmax(0, 1fr) 1em;
+    gap: var(--s-4);
+    align-items: baseline;
+    padding: 14px 10px;
+    margin: 0 -10px;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--dur-base) var(--ease);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover,
+  .project[open] > summary {
+    background: var(--c-sage-tint);
+  }
+  .year {
+    color: var(--c-muted);
+    font-size: var(--fs-small);
+    font-variant-numeric: lining-nums tabular-nums;
+    transition: color var(--dur-base) var(--ease);
+  }
+  summary:hover .year,
+  .project[open] .year {
+    color: var(--c-sage-deep);
+  }
+  .name {
+    color: var(--c-ink);
+    font-weight: var(--fw-medium);
+  }
+  .desc {
+    display: block;
+    font-size: var(--fs-small);
+    color: var(--c-muted);
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+  .chev {
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 1.5px solid var(--c-sage);
+    border-bottom: 1.5px solid var(--c-sage);
+    transform: translateY(-0.15em) rotate(45deg);
+    transition: transform var(--dur-base) var(--ease);
+    justify-self: end;
+  }
+  .project[open] .chev {
+    transform: translateY(0.05em) rotate(225deg);
+  }
+
+  .body {
+    padding: var(--s-2) 0 var(--s-5) calc(4.5em + var(--s-4));
+  }
+  .summary {
+    margin: 0 0 var(--s-3);
+    max-width: var(--measure);
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--s-4);
+    margin: 0 0 var(--s-2);
+    font-size: var(--fs-small);
+    color: var(--c-muted);
+    font-style: italic;
+  }
+  .links {
+    display: flex;
+    gap: var(--s-5);
+    margin: 0;
+    font-size: var(--fs-small);
+  }
+
+  /* Smooth open/close where supported; elsewhere it simply snaps open. */
+  @supports selector(::details-content) {
+    .project::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition:
+        block-size var(--dur-base) var(--ease),
+        content-visibility var(--dur-base) allow-discrete;
+    }
+    .project[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    summary {
+      grid-template-columns: minmax(0, 1fr) 1em;
+      gap: 2px var(--s-3);
+    }
+    .year {
+      grid-column: 1 / -1;
+    }
+    .body {
+      padding-left: 0;
+    }
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+import { site } from "../site.config";
+
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <a class="wordmark" href="/">
+    <span class="name">{site.name}</span>
+  </a>
+  <nav class="nav" aria-label="Main">
+    {site.nav.map((item) => (
+      <a
+        href={item.href}
+        aria-current={isCurrent(item.href) ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+    margin-bottom: var(--s-9);
+  }
+  .wordmark {
+    font-size: 1.15rem;
+    font-weight: var(--fw-medium);
+    color: var(--c-ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark:hover {
+    color: var(--c-ink);
+  }
+  .name::after {
+    content: "";
+    display: inline-block;
+    width: 0.32em;
+    height: 0.32em;
+    margin-left: 0.12em;
+    border-radius: 50%;
+    background: var(--c-sage);
+    transition: transform var(--dur-base) var(--ease);
+  }
+  .wordmark:hover .name::after {
+    transform: scale(1.35);
+  }
+  .nav {
+    display: flex;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: var(--c-muted);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: var(--c-sage);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-base) var(--ease);
+  }
+  .nav a:hover {
+    color: var(--c-ink);
+  }
+  .nav a:hover::after,
+  .nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+  .nav a[aria-current="page"] {
+    color: var(--c-sage-deep);
+    font-style: italic;
+  }
+  @media (max-width: 760px) {
+    .site-header {
+      margin-bottom: var(--s-7);
+    }
+    .nav {
+      gap: var(--s-4);
+    }
+  }
+</style>

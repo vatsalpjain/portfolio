@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garamond Minimal System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN TOKENS  (values extracted from nadh.in/static/style.css)
+   ========================================================= */
+:root {
+  /* Color: neutrals */
+  --c-canvas:   #f6f6f6;  /* page background behind the sheet */
+  --c-surface:  #ffffff;  /* the white "paper" (.wrap) */
+  --c-heading:  #111111;  /* headings, buttons */
+  --c-text:     #333333;  /* body text */
+  --c-muted-1:  #666666;  /* dates, footer links */
+  --c-muted-2:  #888888;  /* meta: status, tags, disclaimers */
+  --c-muted-3:  #999999;  /* captions, footer text */
+  --c-muted-4:  #aaaaaa;  /* blockquote sup */
+  --c-border:   #dddddd;  /* hr, tables, underlines */
+  --c-subtle:   #eeeeee;  /* table header, mobile header rule */
+  --c-code-bg:  #f4f4f4;
+
+  /* Color: accent (the only brand color) */
+  --c-accent:   #ff3300;  /* links, button hover, footnote border */
+  --c-code:     #6262fb;  /* inline code text */
+  --c-hover:    #000000;  /* links turn black on hover */
+
+  /* Type */
+  --font-serif: "EB Garamond", Georgia, "Times New Roman", serif; /* original falls back to "Helvetica Neue", "Segoe UI", sans-serif */
+  --fs-root: 23px;           /* desktop; 26px at ≥1800px; 20px at ≤925px */
+  --fs-h1: 2rem;             /* 46px */
+  --fs-h2: 1.5rem;           /* 34.5px */
+  --fs-h3: 1.3rem;           /* ~30px */
+  --fs-h4: 1.1rem;           /* ~25px */
+  --fs-body: 1rem;           /* 23px */
+  --fs-table: 0.975rem;
+  --fs-small: 0.875rem;      /* ~20px: captions, buttons, lists */
+  --fs-tiny: 0.775rem;       /* ~18px: code, disclaimers, sup */
+  --lh-body: 1.5rem;
+  --lh-heading: 1.3em;
+  --fw-regular: 400;
+  --fw-heading: 500;
+  --fw-bold: 600;
+
+  /* Spacing (px values used across the site, roughly a 15px rhythm) */
+  --s-5: 5px; --s-10: 10px; --s-15: 15px; --s-20: 20px;
+  --s-30: 30px; --s-45: 45px; --s-60: 60px; --s-90: 90px; --s-120: 120px;
+
+  /* Shape */
+  --r-sm: 3px;    /* buttons, inputs, tags */
+  --r-md: 5px;    /* inline code */
+  --r-full: 100%; /* portrait photo */
+
+  /* Layout */
+  --container-max: 1100px;   /* 1300px at ≥1800px */
+  --container-min: 320px;
+  --reading-width: 70%;      /* .half */
+
+  /* Motion */
+  --t-slow: 3000ms;          /* slideshow crossfade; nothing else animates */
+}
+
+/* =========================================================
+   BASE (faithful to the original)
+   ========================================================= */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-size: var(--fs-root); }
+body {
+  background: var(--c-canvas);
+  font-family: var(--font-serif);
+  color: var(--c-text);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+  min-width: 325px;
+}
+a { color: var(--c-accent); text-decoration: none; }
+a:hover { color: var(--c-hover); }
+::selection { background: #000; color: #fff; }
+h1, h2, h3, h4 { font-weight: var(--fw-heading); line-height: var(--lh-heading); margin: 45px 0 20px; color: var(--c-heading); }
+h1 { font-size: var(--fs-h1); } h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); } h4 { font-size: var(--fs-h4); }
+hr { height: 1px; border: 0; border-top: 1px solid var(--c-border); margin: 30px 0; }
+code { display: inline-block; background: var(--c-code-bg); color: var(--c-code); padding: 0 3px; font-size: .775em; line-height: 1.2em; border-radius: var(--r-md); }
+pre code { display: block; }
+button, input, select, textarea { padding: 10px; font-size: var(--fs-small); border-radius: var(--r-sm); color: var(--c-text); font-family: inherit; }
+input, select, textarea { border: 1px solid #767676; background: #fff; }
+button { cursor: pointer; background: var(--c-heading); color: #fff; border: 1px solid var(--c-heading); }
+button:hover { background: var(--c-accent); border-color: var(--c-accent); }
+blockquote { background: var(--c-canvas); font-style: italic; border-left: 5px solid #000; padding: 10px 15px; margin: 0; }
+blockquote em { font-weight: 600; }
+table { width: 100%; border: 1px solid var(--c-border); font-size: var(--fs-table); border-collapse: separate; border-spacing: 0; }
+table th { background: var(--c-subtle); text-align: left; }
+table th, table td { padding: 5px 15px; }
+table td { border-bottom: 1px solid var(--c-border); }
+table tr:last-child td { border-bottom: 0; }
+figure { margin: 0; text-align: center; }
+figcaption { font-size: var(--fs-small); color: var(--c-muted-3); }
+
+.wrap { background: var(--c-surface); margin: 0 auto; padding: 90px 120px; }
+.container { max-width: var(--container-max); min-width: var(--container-min); }
+.half { max-width: var(--reading-width); }
+.date { color: var(--c-muted-1); }
+.post a { text-decoration: underline 2px var(--c-accent); word-break: break-word; }
+.post a:hover { color: #000; text-decoration-color: #000; }
+.footnote { border: solid var(--c-accent); border-width: 1px 3px 3px 1px; padding: 20px; margin: 30px auto; font-size: var(--fs-small); line-height: 1.4; max-width: 75%; }
+.footnote .title { text-transform: uppercase; margin: 0 0 10px; font-size: 1rem; font-weight: bold; }
+.tags a { display: inline-block; border: 1px solid var(--c-text); border-radius: var(--r-sm); padding: 0 6px; color: var(--c-text); line-height: 20px; font-size: .85em; margin: 0 10px 0 0; text-decoration: none; }
+.pagination { margin: 10px 0; padding: 0; font-size: var(--fs-small); }
+.pagination li { list-style: none; display: inline-block; margin: 0 15px 0 0; }
+.pagination .active a { font-weight: bold; color: inherit; text-decoration: underline; }
+
+/* =========================================================
+   DOC-PAGE HELPERS (only for presenting this reference)
+   ========================================================= */
+.ds-header { display: flex; flex-wrap: wrap; margin-bottom: 90px; }
+.ds-header .logo, .ds-header .nav { flex-grow: 1; }
+.ds-header .logo { font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif; font-weight: 600; font-size: 1.25rem; color: var(--c-heading); letter-spacing: -.01em; }
+.ds-header .nav { text-align: right; }
+.ds-header .nav a { display: inline-block; margin-left: 30px; }
+.slogan { font-style: italic; margin: 0 0 60px; }
+.lead { font-size: 1.05rem; }
+.section-label { text-transform: uppercase; letter-spacing: .08em; font-size: var(--fs-tiny); color: var(--c-muted-2); margin: 90px 0 0; }
+.section-label + h2 { margin-top: 5px; }
+.grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.swatch { border: 1px solid var(--c-border); }
+.swatch .chip { height: 80px; }
+.swatch .meta { padding: 8px 12px; font-size: var(--fs-small); line-height: 1.3; }
+.swatch .meta b { display: block; color: var(--c-heading); font-weight: 600; }
+.swatch .meta span { color: var(--c-muted-2); }
+.type-row { display: flex; gap: 30px; align-items: baseline; border-bottom: 1px solid var(--c-subtle); padding: 15px 0; }
+.type-row .spec { flex: 0 0 210px; font-size: var(--fs-small); color: var(--c-muted-2); line-height: 1.3; }
+.type-row .sample { flex: 1; min-width: 0; color: var(--c-heading); }
+.space-row { display: flex; align-items: center; gap: 20px; margin: 6px 0; font-size: var(--fs-small); }
+.space-row .lbl { flex: 0 0 160px; color: var(--c-muted-1); }
+.space-row .bar { height: 14px; background: var(--c-accent); }
+.demo { border: 1px dashed var(--c-border); padding: 30px; margin: 15px 0 10px; }
+.note { font-size: var(--fs-small); color: var(--c-muted-2); line-height: 1.4; }
+.items { padding: 0; margin: 0; }
+.items li { list-style: none; display: flex; margin-bottom: 20px; font-size: var(--fs-small); line-height: 1.3em; }
+.items .d { flex: 1 1 15%; color: var(--c-muted-2); }
+.items .n { flex: 1 1 20%; }
+.items .n a { text-decoration: underline; }
+.items .x { flex: 1 1 65%; }
+.project { display: flex; gap: 20px; margin-bottom: 2em; }
+.project .desc { flex: 1 1 70%; }
+.project h3 { margin: 0; }
+.project h3 a { padding-bottom: 5px; display: inline-block; border-bottom: 1px solid var(--c-border); }
+.project h3 a span { color: var(--c-muted-2); margin-right: 15px; }
+.project .status, .project .meta-tags { color: var(--c-muted-2); }
+.project p { margin: 15px 0 .5em; }
+.photo-demo { width: 160px; height: 160px; border-radius: 100%; background: linear-gradient(135deg, #ccc, #777); filter: grayscale(1); margin: 0 auto 10px; }
+.principles { padding-left: 1.2em; }
+.principles li { margin-bottom: 10px; }
+.principles b { color: var(--c-heading); font-weight: 600; }
+pre.tokens { background: var(--c-code-bg); padding: 20px; overflow-x: auto; font-size: .62rem; line-height: 1.5; border-radius: var(--r-md); }
+pre.tokens code { background: none; color: var(--c-text); padding: 0; font-size: inherit; line-height: inherit; }
+.footer { text-align: center; color: var(--c-muted-3); margin: 30px 0; font-size: var(--fs-small); }
+.footer a { color: var(--c-muted-1); }
+.footer a:hover { color: var(--c-accent); }
+.bp { width: 100%; }
+
+@media screen and (min-width: 1800px) {
+  body { font-size: 26px; line-height: 1.4; }
+  .container { max-width: 1300px; }
+}
+@media (max-width: 925px) {
+  html, body { font-size: 20px; }
+  body { line-height: 1.4em; }
+  .wrap { padding: 30px 16px; }
+  .ds-header { display: block; text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--c-subtle); }
+  .ds-header .logo { margin-bottom: 20px; }
+  .ds-header .nav { display: flex; justify-content: center; flex-wrap: wrap; }
+  .ds-header .nav a { margin: 0 5px; font-size: .75rem; }
+  .slogan { text-align: center; }
+  .half, .footnote { max-width: none; }
+  .type-row { display: block; }
+  .type-row .spec { margin-bottom: 5px; }
+  .items li, .project { display: block; }
+  .space-row .lbl { flex-basis: 110px; }
+  table { font-size: .8rem; }
+  table th, table td { padding: 5px 8px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap container">
+
+  <header class="ds-header">
+    <div class="logo">Design System</div>
+    <nav class="nav">
+      <a href="#principles">Principles</a>
+      <a href="#color">Color</a>
+      <a href="#type">Type</a>
+      <a href="#layout">Layout</a>
+      <a href="#components">Components</a>
+      <a href="#tokens">Tokens</a>
+    </nav>
+  </header>
+
+  <h2 class="slogan">Serif / Paper / One accent</h2>
+
+  <div class="half lead">
+    <p>This is a reference page that reverse-engineers the visual system of <a href="https://nadh.in/">nadh.in</a>. Every value here was taken directly from the site's stylesheet (<code>/static/style.css</code>), and this page is built with those same tokens. That means the page itself is the demo.</p>
+    <p>The whole system fits in about 300 lines of hand-written CSS. It has no framework, no CSS variables, no icon set, no shadows and no gradients. That restraint is the point.</p>
+  </div>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="principles">00 — Foundations</p>
+  <h2>Principles</h2>
+  <ol class="principles half">
+    <li><b>Typography is the interface.</b> One serif typeface (EB Garamond) does all the work. The hierarchy comes from size and italics, not from weight or color.</li>
+    <li><b>One accent color.</b> <span style="color:var(--c-accent)">#ff3300</span> means "this is clickable." Everything else is grayscale.</li>
+    <li><b>Paper on a desk.</b> A white sheet sits on a slightly gray canvas (<code>#fff</code> on <code>#f6f6f6</code>), with very generous padding (90/120px).</li>
+    <li><b>Big body text.</b> The root size is 23px, much larger than typical. Garamond has a small x-height, so it needs the size to read comfortably.</li>
+    <li><b>Inverted hover.</b> On hover, links go from orange to black, and the black button goes to orange.</li>
+    <li><b>No decoration.</b> No shadows, no gradients, nearly no radius (3–5px). Nothing animates except the photo crossfade.</li>
+  </ol>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="color">01 — Foundations</p>
+  <h2>Color</h2>
+  <p class="half">The palette is a grayscale ramp plus one vermilion accent. Gray steps are used for information hierarchy: the less important something is, the lighter it gets.</p>
+
+  <h4>Accent</h4>
+  <div class="grid">
+    <div class="swatch"><div class="chip" style="background:#ff3300"></div><div class="meta"><b>accent</b>#ff3300<br><span>links, button hover, footnote border</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#6262fb"></div><div class="meta"><b>code</b>#6262fb<br><span>inline code text</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#000"></div><div class="meta"><b>hover / selection</b>#000000<br><span>link hover, ::selection bg</span></div></div>
+  </div>
+
+  <h4>Neutrals</h4>
+  <div class="grid">
+    <div class="swatch"><div class="chip" style="background:#111"></div><div class="meta"><b>heading</b>#111111<br><span>h1–h6, button bg</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#333"></div><div class="meta"><b>text</b>#333333<br><span>body, tag borders</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#666"></div><div class="meta"><b>muted-1</b>#666666<br><span>dates, footer links</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#888"></div><div class="meta"><b>muted-2</b>#888888<br><span>status, tags, disclaimers</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#999"></div><div class="meta"><b>muted-3</b>#999999<br><span>captions, footer</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#ddd"></div><div class="meta"><b>border</b>#dddddd<br><span>hr, tables, rules</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#eee"></div><div class="meta"><b>subtle</b>#eeeeee<br><span>table header</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#f4f4f4"></div><div class="meta"><b>code-bg</b>#f4f4f4<br><span>code, highlight blocks</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#f6f6f6"></div><div class="meta"><b>canvas</b>#f6f6f6<br><span>page bg, blockquote</span></div></div>
+    <div class="swatch"><div class="chip" style="background:#fff"></div><div class="meta"><b>surface</b>#ffffff<br><span>the paper sheet</span></div></div>
+  </div>
+  <p class="note">Contrast note: #ff3300 on white is about 3.6:1. That passes WCAG AA for large text, which 23px Garamond roughly is, but not for small text. #888 and #999 meta text sit below 4.5:1. If you adopt this palette, consider #e62e00 and #767676 for strict AA.</p>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="type">02 — Foundations</p>
+  <h2>Typography</h2>
+  <p class="half">One family: <b>EB Garamond</b> (a revival of Claude Garamont's 16th-century type), self-hosted as WOFF in regular and italic. The site's wordmark is a PNG image set in a geometric sans, so it's the only non-serif element. Headings use weight 500, not bold.</p>
+
+  <div class="type-row"><div class="spec">h1 · 2rem / 46px<br>500 · lh 1.3em</div><div class="sample" style="font-size:2rem;font-weight:500">Personal projects</div></div>
+  <div class="type-row"><div class="spec">h2 · 1.5rem / 34.5px<br>500 · lh 1.3em</div><div class="sample" style="font-size:1.5rem;font-weight:500">Projects on GitHub</div></div>
+  <div class="type-row"><div class="spec">h2.slogan · italic<br>the signature move</div><div class="sample" style="font-size:1.5rem;font-style:italic;font-weight:500">Developer / Tinkerer / Absurdist</div></div>
+  <div class="type-row"><div class="spec">h3 · 1.3rem / ~30px</div><div class="sample" style="font-size:1.3rem;font-weight:500">A section within a post</div></div>
+  <div class="type-row"><div class="spec">h4 · 1.1rem / ~25px</div><div class="sample" style="font-size:1.1rem;font-weight:500">A smaller subheading</div></div>
+  <div class="type-row"><div class="spec">body · 1rem / 23px<br>400 · lh 1.5rem · #333</div><div class="sample" style="color:var(--c-text)">Text reads like a printed book, with long line lengths held in check by a 70% column.</div></div>
+  <div class="type-row"><div class="spec">small · .875rem / ~20px<br>captions, lists, buttons</div><div class="sample" style="font-size:.875rem;color:var(--c-text)">Used for project lists, figure captions and form controls.</div></div>
+  <div class="type-row"><div class="spec">tiny · .775rem / ~18px<br>code, disclaimers, sup</div><div class="sample" style="font-size:.775rem;color:var(--c-muted-2)">Licensed under Creative Commons. Fine print lives here.</div></div>
+
+  <h4>Responsive type</h4>
+  <table>
+    <tr><th>Viewport</th><th>Root size</th><th>Line height</th></tr>
+    <tr><td>≤ 925px</td><td>20px</td><td>1.4em</td></tr>
+    <tr><td>926 – 1799px</td><td>23px</td><td>1.5rem</td></tr>
+    <tr><td>≥ 1800px</td><td>26px</td><td>1.4</td></tr>
+  </table>
+  <p class="note">Every size is in rem, so changing the root font size scales the whole site. That's the entire responsive type strategy.</p>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="layout">03 — Foundations</p>
+  <h2>Spacing &amp; layout</h2>
+  <p class="half">Spacing isn't on a strict 4/8px grid. In practice it follows a <b>15px rhythm</b> (15 · 30 · 45 · 60 · 90 · 120), with 5, 10 and 20 for small adjustments.</p>
+
+  <div class="space-row"><span class="lbl">5 · tight</span><span class="bar" style="width:5px"></span></div>
+  <div class="space-row"><span class="lbl">10 · p margin</span><span class="bar" style="width:10px"></span></div>
+  <div class="space-row"><span class="lbl">15 · cell / gutter</span><span class="bar" style="width:15px"></span></div>
+  <div class="space-row"><span class="lbl">20 · h-bottom</span><span class="bar" style="width:20px"></span></div>
+  <div class="space-row"><span class="lbl">30 · nav gap, hr</span><span class="bar" style="width:30px"></span></div>
+  <div class="space-row"><span class="lbl">45 · h-top, post</span><span class="bar" style="width:45px"></span></div>
+  <div class="space-row"><span class="lbl">60 · slogan, lists</span><span class="bar" style="width:60px"></span></div>
+  <div class="space-row"><span class="lbl">90 · sheet top, header</span><span class="bar" style="width:90px"></span></div>
+  <div class="space-row"><span class="lbl">120 · sheet sides</span><span class="bar" style="width:120px"></span></div>
+
+  <h4>Page skeleton</h4>
+  <table>
+    <tr><th>Element</th><th>Rule</th></tr>
+    <tr><td>.wrap (sheet)</td><td>white, padding 90px 120px → 30px 15px on mobile</td></tr>
+    <tr><td>.container</td><td>max-width 1100px (1300px ≥1800), min 320px, left-aligned</td></tr>
+    <tr><td>.header</td><td>flex: logo left, nav right, 90px below</td></tr>
+    <tr><td>.half</td><td>70% reading column. Photo floats right beside it</td></tr>
+    <tr><td>.slideshow</td><td>negative −120px margins to bleed full-width</td></tr>
+    <tr><td>Breakpoint</td><td>one main breakpoint at 925px, which stacks everything and centers the header</td></tr>
+  </table>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="components">04 — Components</p>
+  <h2>Components</h2>
+
+  <h3>Links</h3>
+  <div class="demo">
+    <p style="margin:0 0 10px">Default: <a href="#components">orange, no underline</a>. Hover turns it black.</p>
+    <p class="post" style="margin:0">Inside a post: <a href="#components">2px orange underline</a>, so links stand out in long prose.</p>
+  </div>
+
+  <h3>Navigation</h3>
+  <div class="demo">
+    <div class="ds-header" style="margin:0">
+      <div class="logo">Wordmark</div>
+      <nav class="nav"><a href="#components">Home</a><a href="#components" style="color:inherit">Projects</a><a href="#components">Research</a><a href="#components">Blog</a></nav>
+    </div>
+  </div>
+  <p class="note">The active item is shown by dropping the accent (<code>color: inherit</code>), not by adding an underline or background.</p>
+
+  <h3>Button &amp; inputs</h3>
+  <div class="demo" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <input type="email" placeholder="you@example.com" aria-label="Email">
+    <button type="button">Subscribe</button>
+  </div>
+  <p class="note">Black (#111) with white text and a 3px radius. On hover it flips to the accent. It's the only filled element on the site.</p>
+
+  <h3>Tags</h3>
+  <div class="demo tags"><a href="#components">golang</a><a href="#components">foss</a><a href="#components">databases</a></div>
+
+  <h3>Inline code</h3>
+  <div class="demo"><p style="margin:0">Install with <code>go install ./cmd/app</code> and run it.</p></div>
+
+  <h3>Blockquote</h3>
+  <div class="demo"><blockquote><p style="margin:0">Italic text on the canvas color, with a <em>5px solid black</em> left rule.</p></blockquote></div>
+
+  <h3>Footnote box</h3>
+  <div class="demo">
+    <div class="footnote" style="margin:0 auto">
+      <p class="title">Note</p>
+      An asymmetric border (1px top/left, 3px right/bottom) in the accent color fakes a hard, flat drop shadow without using box-shadow.
+    </div>
+  </div>
+
+  <h3>Dated list (releases / GitHub)</h3>
+  <div class="demo">
+    <ul class="items">
+      <li><span class="d">Apr 2026</span><span class="n"><a href="#components">tiny-cli</a></span><span class="x">A simple, fast command-line tool. Uses SQLite for data.</span></li>
+      <li><span class="d">Jan 2026</span><span class="n"><a href="#components">ui-kit</a></span><span class="x">Ultra-lightweight, zero-dependency, semantic HTML and CSS.</span></li>
+    </ul>
+  </div>
+  <p class="note">A three-column flex layout (15% date / 20% name / 65% description) in small type. It stacks into a block on mobile.</p>
+
+  <h3>Project entry</h3>
+  <div class="demo">
+    <div class="project">
+      <div class="desc">
+        <h3><a href="#components"><span>01</span>Project name</a></h3>
+        <p>A one-paragraph description of what it does and why it exists.</p>
+        <div class="status">Active · 2019 –</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Table</h3>
+  <div class="demo">
+    <table><tr><th>Column</th><th>Value</th></tr><tr><td>Row one</td><td>1px #ddd borders</td></tr><tr><td>Row two</td><td>#eee header</td></tr></table>
+  </div>
+
+  <h3>Portrait &amp; caption</h3>
+  <div class="demo">
+    <figure><div class="photo-demo" role="img" aria-label="Circular grayscale photo placeholder"></div><figcaption>Circular crop, grayscale photo, max 234px</figcaption></figure>
+  </div>
+
+  <h3>Pagination</h3>
+  <div class="demo"><ul class="pagination"><li><a href="#components">« Prev</a></li><li class="active"><a href="#components">2</a></li><li><a href="#components">3</a></li><li><a href="#components">Next »</a></li></ul></div>
+
+  <h3>Divider</h3>
+  <div class="demo"><p style="margin:0">Above</p><hr><p style="margin:0">Below: 1px #ddd, 30px margin</p></div>
+
+  <!-- ===================================================== -->
+  <p class="section-label" id="tokens">05 — Implementation</p>
+  <h2>Token file</h2>
+  <p class="half">The original site hard-codes these values. Here they are as CSS custom properties, ready to drop into a project.</p>
+<pre class="tokens"><code>:root {
+  /* color */
+  --c-canvas:#f6f6f6; --c-surface:#fff;
+  --c-heading:#111;   --c-text:#333;
+  --c-muted-1:#666;   --c-muted-2:#888; --c-muted-3:#999;
+  --c-border:#ddd;    --c-subtle:#eee;  --c-code-bg:#f4f4f4;
+  --c-accent:#ff3300; --c-code:#6262fb; --c-hover:#000;
+
+  /* type */
+  --font-serif:"EB Garamond", Georgia, serif;
+  --fs-root:23px;  /* 20px ≤925, 26px ≥1800 */
+  --fs-h1:2rem; --fs-h2:1.5rem; --fs-h3:1.3rem; --fs-h4:1.1rem;
+  --fs-small:.875rem; --fs-tiny:.775rem;
+  --lh-body:1.5rem; --lh-heading:1.3em; --fw-heading:500;
+
+  /* space (15px rhythm) */
+  --s-1:5px; --s-2:10px; --s-3:15px; --s-4:20px; --s-5:30px;
+  --s-6:45px; --s-7:60px; --s-8:90px; --s-9:120px;
+
+  /* shape &amp; layout */
+  --r-sm:3px; --r-md:5px;
+  --container:1100px; --reading:70%; --bp:925px;
+}</code></pre>
+
+  <hr>
+  <div class="footer">Design analysis of <a href="https://nadh.in/">nadh.in</a> for learning purposes · Typeface: EB Garamond (SIL OFL)</div>
+</div>
+</body>
+</html>

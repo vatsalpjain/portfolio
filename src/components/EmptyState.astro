@@ -1,0 +1,37 @@
+---
+// Honest "nothing here yet" (decision 0001). No apologies, no fake content.
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="empty">
+  <p class="title">{title}</p>
+  <div class="body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .empty {
+    border: 1px dashed var(--c-border-2);
+    border-radius: var(--r-md);
+    padding: var(--s-6);
+    text-align: center;
+    margin: var(--s-5) 0;
+  }
+  .title {
+    font-style: italic;
+    color: var(--c-ink);
+    font-size: 1.1rem;
+    margin: 0 0 var(--s-2);
+  }
+  .body {
+    color: var(--c-muted);
+    font-size: var(--fs-small);
+  }
+  .body :global(p) {
+    margin: 0;
+  }
+</style>

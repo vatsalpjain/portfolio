@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Design System v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN SYSTEM v2 — "Warm & editorial"
+   Serif only · cream paper · sage accent · soft corners · subtle motion · light only
+   ========================================================= */
+:root {
+  /* ---------- Color: paper & ink ---------- */
+  --c-canvas:     #f1ece3;  /* the desk behind the sheet */
+  --c-paper:      #faf7f1;  /* main reading surface */
+  --c-paper-2:    #f4efe6;  /* raised/tinted areas: code, quotes, hover rows */
+  --c-ink:        #2b2a26;  /* headings */
+  --c-text:       #3d3a34;  /* body */
+  --c-muted:      #6f6a60;  /* dates, captions, meta (AA on paper) */
+  --c-faint:      #9a9386;  /* decorative only: ornaments, placeholder */
+  --c-border:     #e4ddd0;  /* hairlines */
+  --c-border-2:   #d6cdbd;  /* input borders, stronger rules */
+
+  /* ---------- Color: sage accent ---------- */
+  --c-sage:       #557560;  /* links, active nav, primary button (AA on paper) */
+  --c-sage-deep:  #3b5745;  /* hover / pressed */
+  --c-sage-mid:   #7f9b87;  /* ornaments, quote marks, drop cap, dividers */
+  --c-sage-line:  #a9c0ae;  /* resting link underline */
+  --c-sage-wash:  #d9e5da;  /* highlighter marks */
+  --c-sage-tint:  #e6ede5;  /* callouts, tags, selection */
+  --c-forest:     #2f4637;  /* deep band: footer, feature blocks */
+  --c-forest-ink: #eef2ea;  /* text on forest */
+
+  /* ---------- Type ---------- */
+  --font-serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --fs-root: 21px;          /* 19px ≤ 760px · 23px ≥ 1600px */
+  --fs-display: 2.25rem;    /* page titles */
+  --fs-h1: 1.9rem;
+  --fs-h2: 1.5rem;
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  --fs-small: .875rem;
+  --fs-tiny: .78rem;
+  --lh-body: 1.65;
+  --lh-tight: 1.25;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --measure: 34em;          /* ideal reading width, ~65 characters */
+
+  /* ---------- Space (8px base) ---------- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+
+  /* ---------- Shape ---------- */
+  --r-sm: 8px;              /* buttons, inputs, tags, inline code */
+  --r-md: 12px;             /* cards, callouts, code blocks, images */
+  --r-lg: 20px;             /* the paper sheet */
+  --r-full: 999px;          /* portrait */
+
+  /* ---------- Layout ---------- */
+  --container: 960px;
+  --gutter: 96px;           /* 20px on mobile */
+
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(.22, .61, .36, 1);   /* gentle ease-out */
+  --dur-fast: 160ms;        /* color, underline */
+  --dur-base: 260ms;        /* buttons, backgrounds */
+  --dur-slow: 700ms;        /* scroll reveal */
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: var(--fs-root); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--c-canvas); color: var(--c-text);
+  font-family: var(--font-serif); font-weight: var(--fw-regular);
+  line-height: var(--lh-body); text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased; font-kerning: normal;
+  font-variant-ligatures: common-ligatures; font-variant-numeric: oldstyle-nums;
+}
+::selection { background: var(--c-sage); color: #fff; }
+h1, h2, h3, h4 { color: var(--c-ink); font-weight: var(--fw-medium); line-height: var(--lh-tight); margin: var(--s-8) 0 var(--s-4); text-wrap: balance; letter-spacing: -.005em; }
+h1 { font-size: var(--fs-h1); } h2 { font-size: var(--fs-h2); } h3 { font-size: var(--fs-h3); }
+p { margin: 0 0 var(--s-4); text-wrap: pretty; }
+
+a {
+  color: var(--c-sage); text-decoration: underline; text-decoration-color: var(--c-sage-line);
+  text-decoration-thickness: 1px; text-underline-offset: .2em;
+  transition: color var(--dur-fast) var(--ease), text-decoration-color var(--dur-fast) var(--ease);
+}
+a:hover { color: var(--c-sage-deep); text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--c-sage); outline-offset: 3px; border-radius: 4px; }
+
+/* Leaf divider: hairline – sage leaf – hairline */
+hr { border: 0; height: 16px; margin: var(--s-8) auto; max-width: 180px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='16' viewBox='0 0 180 16'%3E%3Cpath d='M0 8h72M108 8h72' stroke='%23a9c0ae' stroke-width='1'/%3E%3Cpath d='M80 8c6-8 14-8 20 0-6 8-14 8-20 0z' fill='%237f9b87'/%3E%3Cpath d='M80 8h20' stroke='%23faf7f1' stroke-width='.8'/%3E%3C/svg%3E") center / contain no-repeat; }
+hr.rule { height: 1px; max-width: none; background: var(--c-border); margin: var(--s-6) 0; }
+
+button, .btn {
+  font: inherit; font-size: var(--fs-small); line-height: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: var(--r-sm); border: 1px solid var(--c-sage);
+  background: var(--c-sage); color: #fff; text-decoration: none;
+  transition: background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease), transform var(--dur-fast) var(--ease);
+}
+button:hover, .btn:hover { background: var(--c-sage-deep); border-color: var(--c-sage-deep); color: #fff; }
+button:active, .btn:active { transform: translateY(1px); }
+.btn-quiet { background: transparent; color: var(--c-ink); border-color: var(--c-border-2); }
+.btn-quiet:hover { background: var(--c-paper-2); color: var(--c-ink); border-color: var(--c-border-2); }
+
+input, textarea {
+  font: inherit; font-size: var(--fs-small); color: var(--c-text); background: #fff;
+  padding: 11px 14px; border: 1px solid var(--c-border-2); border-radius: var(--r-sm);
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+input::placeholder { color: var(--c-faint); }
+input:focus { outline: none; border-color: var(--c-sage); box-shadow: 0 0 0 3px var(--c-sage-tint); }
+
+code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .78em; background: var(--c-paper-2); color: #6b5a43; padding: 2px 6px; border-radius: 6px; }
+pre { background: var(--c-paper-2); border: 1px solid var(--c-border); border-radius: var(--r-md); padding: var(--s-4) var(--s-5); overflow-x: auto; margin: var(--s-5) 0; }
+pre code { background: none; padding: 0; font-size: .72rem; line-height: 1.7; color: var(--c-text); }
+
+blockquote { position: relative; margin: var(--s-7) 0; padding: 0 0 0 var(--s-7); font-style: italic; color: var(--c-ink); font-size: 1.2rem; line-height: 1.45; }
+blockquote::before { content: "\201C"; position: absolute; left: -4px; top: -.32em; font-size: 4.2rem; line-height: 1; color: var(--c-sage-mid); font-style: normal; }
+blockquote cite { display: block; margin-top: var(--s-2); font-size: var(--fs-small); color: var(--c-muted); font-style: normal; }
+
+figure { margin: var(--s-6) 0; }
+figure .img { border-radius: var(--r-md); }
+figcaption { margin-top: var(--s-2); font-size: var(--fs-small); color: var(--c-muted); font-style: italic; text-align: center; }
+
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+th { text-align: left; font-weight: var(--fw-medium); color: var(--c-ink); border-bottom: 1px solid var(--c-border-2); padding: 8px 12px 8px 0; }
+td { border-bottom: 1px solid var(--c-border); padding: 8px 12px 8px 0; vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.sheet {
+  max-width: var(--container); margin: var(--s-7) auto; background: var(--c-paper);
+  border-radius: var(--r-lg); padding: var(--s-8) var(--gutter) var(--s-7);
+  box-shadow: 0 1px 2px rgba(60, 50, 30, .04);
+}
+.measure { max-width: var(--measure); }
+
+/* =========================================================
+   COMPONENTS
+   ========================================================= */
+/* Header + nav */
+.site-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--s-4); margin-bottom: var(--s-9); }
+.wordmark { font-size: 1.15rem; font-weight: var(--fw-medium); color: var(--c-ink); text-decoration: none; letter-spacing: -.01em; }
+.wordmark:hover { color: var(--c-ink); }
+.wordmark::after { content: ""; display: inline-block; width: .32em; height: .32em; margin-left: .12em; border-radius: 50%; background: var(--c-sage); transition: transform var(--dur-base) var(--ease); }
+.wordmark:hover::after { transform: scale(1.35); }
+.nav { display: flex; gap: var(--s-5); flex-wrap: wrap; }
+.nav a { color: var(--c-muted); text-decoration: none; position: relative; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: var(--c-sage); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-base) var(--ease); }
+.nav a:hover { color: var(--c-ink); }
+.nav a:hover::after, .nav a[aria-current="page"]::after { transform: scaleX(1); }
+.nav a[aria-current="page"] { color: var(--c-sage-deep); font-style: italic; }
+
+/* Intro */
+.tagline { font-size: var(--fs-display); font-style: italic; font-weight: var(--fw-regular); color: var(--c-ink); line-height: 1.15; margin: 0 0 var(--s-6); letter-spacing: -.01em; }
+.tagline em { color: var(--c-sage); }
+
+/* Highlighter mark: a sage stroke behind a word */
+.mark { background: linear-gradient(transparent 58%, var(--c-sage-wash) 58%, var(--c-sage-wash) 92%, transparent 92%); padding: 0 .08em; border-radius: 2px; }
+/* Hand-drawn squiggle under a word */
+.squiggle { padding-bottom: .12em; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 5c4-4 8-4 12 0s8 4 12 0' fill='none' stroke='%23557560' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x 0 100% / 18px 6px; }
+
+/* Prose links: sage highlight sweeps up from the underline on hover */
+p a:not(.btn), li p a, .callout a {
+  background: linear-gradient(var(--c-sage-tint), var(--c-sage-tint)) no-repeat 0 100% / 100% 0;
+  transition: color var(--dur-fast) var(--ease), text-decoration-color var(--dur-fast) var(--ease), background-size var(--dur-base) var(--ease);
+  border-radius: 2px;
+}
+p a:not(.btn):hover, li p a:hover, .callout a:hover { background-size: 100% 100%; }
+
+/* "Currently" status pill with a breathing dot */
+.now { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); color: var(--c-sage-deep); background: var(--c-sage-tint); border-radius: var(--r-full); padding: 4px 14px 4px 12px; margin-bottom: var(--s-5); }
+.now .dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--c-sage); }
+.now .dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--c-sage); animation: breathe 2.4s var(--ease) infinite; }
+@keyframes breathe { 0% { transform: scale(1); opacity: .6; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
+
+/* Forest band: the one deep-green block per page */
+.band { background: var(--c-forest); color: var(--c-forest-ink); border-radius: var(--r-md); padding: var(--s-6) var(--s-6); }
+.band h2, .band h3 { color: #fff; margin-top: 0; }
+.band p { color: #cfdacf; }
+.band a { color: #fff; text-decoration-color: #7f9b87; }
+.band input { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22); color: #fff; }
+.band input::placeholder { color: #a9bcac; }
+.band input:focus { border-color: #a9c0ae; box-shadow: 0 0 0 3px rgba(169,192,174,.25); }
+.band button { background: var(--c-forest-ink); color: var(--c-forest); border-color: var(--c-forest-ink); }
+.band button:hover { background: #fff; color: var(--c-forest); border-color: #fff; }
+
+/* Margin note: a small aside in sage italic */
+.sidenote { display: block; margin: var(--s-2) 0 var(--s-4); padding-left: 1.4em; text-indent: -1.4em; font-size: var(--fs-small); font-style: italic; color: var(--c-sage-deep); line-height: 1.45; }
+.sidenote::before { content: "\21B3\00a0\00a0"; color: var(--c-sage-mid); font-style: normal; }
+
+/* Reading progress bar */
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; background: var(--c-sage); transform-origin: 0 50%; transform: scaleX(0); z-index: 10; }
+.intro { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: var(--s-7); align-items: start; }
+.portrait { width: 180px; height: 180px; border-radius: var(--r-full); background: radial-gradient(circle at 40% 35%, #d9d2c4, #b9b0a0); filter: saturate(.6); }
+
+/* Section heading with "see all" */
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-4); border-bottom: 1px solid var(--c-border); padding-bottom: var(--s-2); margin: var(--s-8) 0 var(--s-2); }
+.section-head h2 { margin: 0; font-size: var(--fs-h3); }
+.section-head h2 .num { font-style: italic; color: var(--c-sage-mid); margin-right: .45em; font-size: .85em; }
+.section-head a { font-size: var(--fs-small); text-decoration: none; }
+
+/* Dated list — projects & writing */
+.dated { list-style: none; margin: 0; padding: 0; }
+.dated li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s-4); padding: 14px 10px; margin: 0 -10px; border-radius: var(--r-sm); transition: background var(--dur-base) var(--ease); }
+.dated li:hover { background: var(--c-sage-tint); }
+.dated .date { color: var(--c-muted); font-size: var(--fs-small); padding-top: 2px; font-variant-numeric: lining-nums tabular-nums; transition: color var(--dur-base) var(--ease); }
+.dated li:hover .date { color: var(--c-sage-deep); }
+.dated .title { color: var(--c-ink); text-decoration: none; font-weight: var(--fw-medium); }
+.dated .title:hover { color: var(--c-sage-deep); }
+.dated .title .arrow { display: inline-block; color: var(--c-sage); opacity: 0; transform: translateX(-4px); transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease); }
+.dated li:hover .arrow { opacity: 1; transform: none; }
+.dated .desc { display: block; font-size: var(--fs-small); color: var(--c-muted); line-height: 1.5; margin-top: 2px; }
+.dated .meta { font-size: var(--fs-tiny); color: var(--c-muted); margin-left: 8px; font-style: italic; }
+
+/* Tags */
+.tags { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+.tag { font-size: var(--fs-tiny); color: var(--c-sage-deep); background: var(--c-sage-tint); border: 1px solid var(--c-sage-tint); border-radius: var(--r-sm); padding: 2px 10px; text-decoration: none; transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease); }
+.tag::before { content: "#"; color: var(--c-sage-mid); margin-right: 1px; }
+.tag:hover { background: var(--c-sage); color: #fff; border-color: var(--c-sage); }
+.tag:hover::before { color: var(--c-sage-tint); }
+
+/* Callout */
+.callout { background: var(--c-sage-tint); border: 1px solid var(--c-sage-wash); border-radius: var(--r-md); padding: var(--s-4) var(--s-5); font-size: var(--fs-small); color: var(--c-ink); line-height: 1.55; }
+.callout .label { display: flex; align-items: center; gap: 8px; font-style: italic; color: var(--c-sage-deep); margin-bottom: 4px; }
+.callout .label::before { content: ""; width: 12px; height: 12px; background: var(--c-sage); border-radius: 0 100% 0 100%; }
+
+/* Article header */
+.article-meta { color: var(--c-muted); font-size: var(--fs-small); font-style: italic; margin-bottom: var(--s-6); }
+.article-title { font-size: var(--fs-display); margin: 0 0 var(--s-2); line-height: 1.12; }
+.dropcap::first-letter { float: left; font-size: 3.4em; line-height: .8; padding: 8px 10px 0 0; color: var(--c-sage); font-weight: var(--fw-medium); }
+sup a { text-decoration: none; font-size: .75em; }
+
+/* Pagination */
+.pager { display: flex; justify-content: space-between; gap: var(--s-4); border-top: 1px solid var(--c-border); padding-top: var(--s-4); font-size: var(--fs-small); }
+.pager a { text-decoration: none; }
+.pager .lbl { display: block; color: var(--c-muted); font-size: var(--fs-tiny); font-style: italic; }
+
+/* Footer */
+.site-footer { margin-top: var(--s-9); padding: var(--s-5) var(--s-6); background: var(--c-forest); border-radius: var(--r-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s-3); font-size: var(--fs-small); color: #cfdacf; }
+.site-footer .sign { font-style: italic; color: #fff; }
+.site-footer a { color: #cfdacf; text-decoration-color: #5e7a66; }
+.site-footer a:hover { color: #fff; text-decoration-color: #fff; }
+.site-footer nav { display: flex; gap: var(--s-4); }
+
+/* Scroll reveal (only when JS + motion allowed) */
+.js .reveal { opacity: 0; transform: translateY(12px); transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease); }
+.js .reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+  .js .reveal { opacity: 1; transform: none; }
+  .now .dot::after { animation: none; }
+}
+
+/* =========================================================
+   DOC-PAGE HELPERS (for presenting this reference only)
+   ========================================================= */
+.eyebrow { display: flex; align-items: center; gap: 12px; font-style: italic; color: var(--c-sage); font-size: var(--fs-small); margin: var(--s-10) 0 0; }
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--c-sage-mid); }
+.eyebrow + h2 { margin-top: 4px; font-size: var(--fs-h1); }
+.lede { font-size: 1.1rem; color: var(--c-text); }
+.demo { border: 1px dashed var(--c-border-2); border-radius: var(--r-md); padding: var(--s-6); margin: var(--s-3) 0 var(--s-2); background: var(--c-paper); }
+.demo.flush { padding: var(--s-4) var(--s-6); }
+.note { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.5; margin: var(--s-2) 0 var(--s-5); }
+.grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.sw { border: 1px solid var(--c-border); border-radius: var(--r-md); overflow: hidden; background: #fff; }
+.sw .chip { height: 72px; }
+.sw .meta { padding: 8px 12px; font-size: var(--fs-tiny); line-height: 1.35; color: var(--c-muted); }
+.sw .meta b { display: block; color: var(--c-ink); font-weight: var(--fw-medium); font-size: var(--fs-small); }
+.type-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: var(--s-5); align-items: baseline; border-bottom: 1px solid var(--c-border); padding: var(--s-4) 0; }
+.type-row .spec { font-size: var(--fs-tiny); color: var(--c-muted); line-height: 1.4; }
+.type-row .sample { color: var(--c-ink); min-width: 0; }
+.space-row { display: flex; align-items: center; gap: var(--s-4); margin: 6px 0; font-size: var(--fs-tiny); color: var(--c-muted); }
+.space-row .lbl { flex: 0 0 150px; }
+.space-row .bar { height: 12px; background: var(--c-sage-line); border-radius: 3px; }
+.radius-row { display: flex; gap: var(--s-5); flex-wrap: wrap; }
+.radius-row div { text-align: center; font-size: var(--fs-tiny); color: var(--c-muted); }
+.radius-row span { display: block; width: 84px; height: 64px; background: var(--c-paper-2); border: 1px solid var(--c-border-2); margin-bottom: 6px; }
+.motion-demo { display: flex; gap: var(--s-4); flex-wrap: wrap; align-items: center; }
+.principles { padding-left: 1.2em; margin: 0; }
+.principles li { margin-bottom: var(--s-3); }
+.principles b { color: var(--c-ink); font-weight: var(--fw-medium); }
+.compare td:first-child { color: var(--c-ink); }
+.compare td:nth-child(2) { color: var(--c-muted); }
+
+@media (min-width: 1600px) { html { font-size: 23px; } }
+@media (max-width: 760px) {
+  html { font-size: 19px; }
+  :root { --gutter: 20px; --fs-display: 1.85rem; }
+  .sheet { margin: 0; border-radius: 0; padding: var(--s-6) var(--gutter); }
+  .site-header { margin-bottom: var(--s-7); }
+  .nav { gap: var(--s-4); }
+  .intro { grid-template-columns: 1fr; gap: var(--s-5); }
+  .portrait { width: 120px; height: 120px; order: -1; }
+  .dated li { grid-template-columns: 1fr; gap: 0; }
+  .type-row { grid-template-columns: 1fr; gap: 4px; }
+  .space-row .lbl { flex-basis: 110px; }
+  .demo { padding: var(--s-4); }
+  .eyebrow { margin-top: var(--s-9); }
+  .dropcap::first-letter { font-size: 2.6em; }
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<main class="sheet">
+
+  <header class="site-header">
+    <a class="wordmark" href="#top" id="top">Design System v2</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#principles">Principles</a>
+      <a href="#color">Color</a>
+      <a href="#type">Type</a>
+      <a href="#space">Space</a>
+      <a href="#motion">Motion</a>
+      <a href="#components">Components</a>
+      <a href="#tokens">Tokens</a>
+    </nav>
+  </header>
+
+  <span class="now"><span class="dot"></span>v2.0 · final · November 2026</span>
+  <p class="tagline">Warm paper, quiet ink, and <em class="squiggle">a little sage.</em></p>
+  <div class="measure lede">
+    <p>This is the second version of the portfolio design system. It keeps v1's book-like soul: one serif typeface, generous space and calm pages. It adds <span class="mark">a voice of its own</span>. Sage is the signature color, and it shows up in small, deliberate places: a dot after the name, a leaf between sections, a highlighter behind key words, a deep forest footer.</p>
+    <p class="note" style="margin:0">Your choices: warm and editorial mood · EB Garamond · sage accent · softly rounded corners (8–12px) · subtle transitions · light mode only · about, projects and writing sections · projects as a simple dated list.</p>
+  </div>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="principles">Chapter one</p>
+  <h2 class="reveal">Principles</h2>
+  <ol class="principles measure reveal">
+    <li><b>Calm over clever.</b> If something draws attention to itself, it needs a reason. Content leads and the interface stays quiet.</li>
+    <li><b>One voice.</b> EB Garamond everywhere. Hierarchy comes from size, italics and space, never from extra fonts or heavy weights.</li>
+    <li><b>Warm, not white.</b> Pure white and pure black are banned. Everything sits on cream paper in soft brown-black ink.</li>
+    <li><b>Sage is the signature.</b> Sage marks everything clickable, and it's also the color of the site's "handwriting": the name dot, leaf dividers, drop caps, highlights, quote marks and the forest footer.</li>
+    <li><b>Quietly playful.</b> Small human touches, like a squiggle under a word, a breathing "currently" dot or a sidenote in the margin, give the site a voice without making it loud. Use one or two per screen, not all at once.</li>
+    <li><b>Soft edges.</b> Corners are 8–12px. Shadows are nearly invisible, and lines are hairlines.</li>
+    <li><b>Slow and gentle.</b> Transitions ease out over 160–700ms. Nothing bounces, and everything respects reduced-motion settings.</li>
+    <li><b>Readable first.</b> Lines are about 65 characters wide, the line height is 1.65, and all text meets WCAG AA contrast.</li>
+  </ol>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="color">Chapter two</p>
+  <h2 class="reveal">Color</h2>
+  <p class="measure">There are two families. <b>Paper and ink</b> are warm neutrals, and the <b>sage accent</b> has four steps. Neutrals are tinted toward brown so nothing feels cold.</p>
+
+  <h3>Paper &amp; ink</h3>
+  <div class="grid">
+    <div class="sw"><div class="chip" style="background:#f1ece3"></div><div class="meta"><b>canvas</b>#f1ece3 · desk behind the sheet</div></div>
+    <div class="sw"><div class="chip" style="background:#faf7f1"></div><div class="meta"><b>paper</b>#faf7f1 · main surface</div></div>
+    <div class="sw"><div class="chip" style="background:#f4efe6"></div><div class="meta"><b>paper-2</b>#f4efe6 · code, hover rows</div></div>
+    <div class="sw"><div class="chip" style="background:#e4ddd0"></div><div class="meta"><b>border</b>#e4ddd0 · hairlines</div></div>
+    <div class="sw"><div class="chip" style="background:#d6cdbd"></div><div class="meta"><b>border-2</b>#d6cdbd · inputs, strong rules</div></div>
+    <div class="sw"><div class="chip" style="background:#9a9386"></div><div class="meta"><b>faint</b>#9a9386 · ornaments only</div></div>
+    <div class="sw"><div class="chip" style="background:#6f6a60"></div><div class="meta"><b>muted</b>#6f6a60 · dates, captions</div></div>
+    <div class="sw"><div class="chip" style="background:#3d3a34"></div><div class="meta"><b>text</b>#3d3a34 · body</div></div>
+    <div class="sw"><div class="chip" style="background:#2b2a26"></div><div class="meta"><b>ink</b>#2b2a26 · headings</div></div>
+  </div>
+
+  <h3>Sage, the signature</h3>
+  <div class="grid">
+    <div class="sw"><div class="chip" style="background:#e6ede5"></div><div class="meta"><b>sage-tint</b>#e6ede5 · callouts, tags, row hover</div></div>
+    <div class="sw"><div class="chip" style="background:#d9e5da"></div><div class="meta"><b>sage-wash</b>#d9e5da · highlighter marks</div></div>
+    <div class="sw"><div class="chip" style="background:#a9c0ae"></div><div class="meta"><b>sage-line</b>#a9c0ae · link underlines</div></div>
+    <div class="sw"><div class="chip" style="background:#7f9b87"></div><div class="meta"><b>sage-mid</b>#7f9b87 · leaves, quote marks</div></div>
+    <div class="sw"><div class="chip" style="background:#557560"></div><div class="meta"><b>sage</b>#557560 · links, buttons, drop cap</div></div>
+    <div class="sw"><div class="chip" style="background:#3b5745"></div><div class="meta"><b>sage-deep</b>#3b5745 · hover, active nav</div></div>
+    <div class="sw"><div class="chip" style="background:#2f4637"></div><div class="meta"><b>forest</b>#2f4637 · footer, feature band</div></div>
+  </div>
+  <div class="band" style="margin-top:var(--s-5)">
+    <p style="margin:0;color:#eef2ea">How much green is on a page? Roughly <b style="font-weight:500;color:#fff">80% paper, 15% ink, 5% sage</b>, plus one forest block. That's enough for the green to feel like the site's own color while the pages stay calm.</p>
+  </div>
+
+  <h3>Contrast on paper</h3>
+  <table>
+    <tr><th>Pair</th><th>Ratio</th><th>Use</th></tr>
+    <tr><td>ink on paper</td><td>13.4 : 1</td><td>headings</td></tr>
+    <tr><td>text on paper</td><td>10.6 : 1</td><td>body copy</td></tr>
+    <tr><td>muted on paper</td><td>5.0 : 1</td><td>meta, captions (AA)</td></tr>
+    <tr><td>sage on paper</td><td>4.8 : 1</td><td>links (AA)</td></tr>
+    <tr><td>white on sage</td><td>5.1 : 1</td><td>primary button (AA)</td></tr>
+    <tr><td>sage-deep on sage-tint</td><td>6.7 : 1</td><td>tags, row hover (AA)</td></tr>
+    <tr><td>forest-ink on forest</td><td>9.0 : 1</td><td>footer and band text (AA)</td></tr>
+  </table>
+  <p class="note">Faint (#9a9386) and sage-mid (#7f9b87) are below AA, so they're only for decoration like leaves, quote marks and ornaments, never for words you need to read.</p>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="type">Chapter three</p>
+  <h2 class="reveal">Typography</h2>
+  <p class="measure">One family, <b>EB Garamond</b>, in regular, medium and italic. The scale is gentler than v1, with a smaller root (21px vs 23px) but more line height (1.65 vs ~1.5), so pages feel airier. Body text uses old-style figures, and dates use lining tabular figures so they align.</p>
+
+  <div class="type-row"><div class="spec">display · 2.25rem<br>italic 400 · lh 1.15</div><div class="sample" style="font-size:2.25rem;font-style:italic;line-height:1.15">Developer / Writer / Tinkerer</div></div>
+  <div class="type-row"><div class="spec">h1 · 1.9rem<br>500 · lh 1.25</div><div class="sample" style="font-size:1.9rem;font-weight:500;line-height:1.25">Selected projects</div></div>
+  <div class="type-row"><div class="spec">h2 · 1.5rem · 500</div><div class="sample" style="font-size:1.5rem;font-weight:500">Things I've written</div></div>
+  <div class="type-row"><div class="spec">h3 · 1.25rem · 500</div><div class="sample" style="font-size:1.25rem;font-weight:500">A smaller section</div></div>
+  <div class="type-row"><div class="spec">body · 1rem / 21px<br>400 · lh 1.65</div><div class="sample" style="color:var(--c-text)">Good writing on the web should feel like a well-set page in a book: calm, even and unhurried. Since 2019, 1,204 words.</div></div>
+  <div class="type-row"><div class="spec">body italic</div><div class="sample" style="font-style:italic;color:var(--c-text)">Used for emphasis, taglines, captions and quiet labels.</div></div>
+  <div class="type-row"><div class="spec">small · .875rem<br>meta, buttons, lists</div><div class="sample" style="font-size:.875rem;color:var(--c-muted)">Apr 2026 · 6 min read</div></div>
+  <div class="type-row"><div class="spec">tiny · .78rem<br>tags, footnotes</div><div class="sample" style="font-size:.78rem;color:var(--c-muted)">Licensed under CC BY 4.0</div></div>
+
+  <h3>Responsive type</h3>
+  <table>
+    <tr><th>Viewport</th><th>Root</th><th>Display</th></tr>
+    <tr><td>≤ 760px</td><td>19px</td><td>1.85rem</td></tr>
+    <tr><td>761 – 1599px</td><td>21px</td><td>2.25rem</td></tr>
+    <tr><td>≥ 1600px</td><td>23px</td><td>2.25rem</td></tr>
+  </table>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="space">Chapter four</p>
+  <h2 class="reveal">Space, shape &amp; layout</h2>
+  <p class="measure">Spacing moves from v1's loose 15px rhythm to a strict <b>8px base</b>, which is easier to reason about. Large gaps between sections are what make the page feel calm.</p>
+
+  <div class="space-row"><span class="lbl">s-1 · 4</span><span class="bar" style="width:4px"></span></div>
+  <div class="space-row"><span class="lbl">s-2 · 8</span><span class="bar" style="width:8px"></span></div>
+  <div class="space-row"><span class="lbl">s-3 · 12</span><span class="bar" style="width:12px"></span></div>
+  <div class="space-row"><span class="lbl">s-4 · 16 · paragraphs</span><span class="bar" style="width:16px"></span></div>
+  <div class="space-row"><span class="lbl">s-5 · 24 · gaps</span><span class="bar" style="width:24px"></span></div>
+  <div class="space-row"><span class="lbl">s-6 · 32 · blocks</span><span class="bar" style="width:32px"></span></div>
+  <div class="space-row"><span class="lbl">s-7 · 48</span><span class="bar" style="width:48px"></span></div>
+  <div class="space-row"><span class="lbl">s-8 · 64 · headings</span><span class="bar" style="width:64px"></span></div>
+  <div class="space-row"><span class="lbl">s-9 · 96 · gutter</span><span class="bar" style="width:96px"></span></div>
+  <div class="space-row"><span class="lbl">s-10 · 128 · chapters</span><span class="bar" style="width:128px"></span></div>
+
+  <h3>Corner radius</h3>
+  <div class="radius-row">
+    <div><span style="border-radius:8px"></span>r-sm · 8<br>buttons, inputs, tags</div>
+    <div><span style="border-radius:12px"></span>r-md · 12<br>callouts, code, images</div>
+    <div><span style="border-radius:20px"></span>r-lg · 20<br>the paper sheet</div>
+    <div><span style="border-radius:999px;width:64px"></span>full<br>portrait</div>
+  </div>
+  <p class="note">Single-sided borders, like the blockquote's left rule, stay square. Rounding only works on full outlines.</p>
+
+  <h3>Page skeleton</h3>
+  <table>
+    <tr><th>Part</th><th>Rule</th></tr>
+    <tr><td>Canvas</td><td>#f1ece3 fills the window</td></tr>
+    <tr><td>Sheet</td><td>paper, max 960px, centered, radius 20, padding 64 / 96. Edge to edge on mobile</td></tr>
+    <tr><td>Measure</td><td>text blocks max 34em (~65 characters per line)</td></tr>
+    <tr><td>Header</td><td>wordmark left, nav right, 96px below</td></tr>
+    <tr><td>Intro</td><td>text + 180px portrait in two columns. Portrait stacks on top on mobile</td></tr>
+    <tr><td>Breakpoint</td><td>one, at 760px</td></tr>
+  </table>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="motion">Chapter five</p>
+  <h2 class="reveal">Motion</h2>
+  <p class="measure">Motion here is the "smoother" part: everything changes gently instead of snapping. It uses one easing curve, a soft ease-out, at three speeds.</p>
+  <table>
+    <tr><th>Token</th><th>Value</th><th>Used for</th></tr>
+    <tr><td>--dur-fast</td><td>160ms</td><td>link color, underline, tag hover, focus ring</td></tr>
+    <tr><td>--dur-base</td><td>260ms</td><td>buttons, row hover, nav underline slide, arrow nudge</td></tr>
+    <tr><td>--dur-slow</td><td>700ms</td><td>scroll reveal: fade + 12px rise, once</td></tr>
+    <tr><td>--ease</td><td>cubic-bezier(.22,.61,.36,1)</td><td>everything, no bounce or overshoot</td></tr>
+  </table>
+  <div class="demo motion-demo">
+    <a href="#motion">Hover this link</a>
+    <button type="button">Primary</button>
+    <button type="button" class="btn-quiet">Quiet</button>
+    <nav class="nav" aria-label="Demo nav"><a href="#motion">Hover</a><a href="#motion" aria-current="page">Active</a></nav>
+  </div>
+  <p class="note">With "reduce motion" turned on in the operating system, all transitions are disabled and reveals show immediately.</p>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="components">Chapter six</p>
+  <h2 class="reveal">Components</h2>
+  <p class="measure">Every piece the portfolio needs for its three sections: about, projects and writing. Each demo below uses the real component styles.</p>
+
+  <h3>Header &amp; navigation</h3>
+  <div class="demo">
+    <header class="site-header" style="margin:0">
+      <a class="wordmark" href="#components">Your Name</a>
+      <nav class="nav" aria-label="Example"><a href="#components" aria-current="page">About</a><a href="#components">Projects</a><a href="#components">Writing</a></nav>
+    </header>
+  </div>
+  <p class="note">Nav links are muted, not sage, because they're always visible and shouldn't shout. The active page gets ink color and a sage hairline that slides in from the left on hover.</p>
+
+  <h3>About / intro</h3>
+  <div class="demo">
+    <span class="now"><span class="dot"></span>Currently building Quiet Notes</span>
+    <p class="tagline" style="font-size:1.85rem;margin-bottom:var(--s-5)">Developer / Writer / <em class="squiggle">Tinkerer</em></p>
+    <div class="intro">
+      <div>
+        <p>I'm a software developer who likes <span class="mark">small, careful tools</span> and long, slow reading. Right now I'm building web apps and learning how to write about them.</p>
+        <p style="margin:0">Previously at <a href="#components">Some Company</a>. Elsewhere on <a href="#components">GitHub</a> and <a href="#components">email</a>.</p>
+      </div>
+      <div class="portrait" role="img" aria-label="Portrait placeholder"></div>
+    </div>
+  </div>
+
+  <h3>Projects: dated list</h3>
+  <div class="demo flush">
+    <div class="section-head" style="margin-top:0"><h2><span class="num">i.</span>Projects</h2><a href="#components">All projects →</a></div>
+    <ul class="dated">
+      <li><span class="date">2026</span><div><a class="title" href="#components">Quiet Notes <span class="arrow">→</span></a><span class="meta">active</span><span class="desc">A distraction-free markdown notes app that syncs through plain files.</span></div></li>
+      <li><span class="date">2025</span><div><a class="title" href="#components">tiny-cli <span class="arrow">→</span></a><span class="meta">Go</span><span class="desc">A small command-line tool for renaming photos by date.</span></div></li>
+      <li><span class="date">2024</span><div><a class="title" href="#components">Portfolio v1 <span class="arrow">→</span></a><span class="meta">archived</span><span class="desc">The first version of this site, inspired by a minimal serif look.</span></div></li>
+    </ul>
+  </div>
+  <p class="note">Section titles get a small sage roman numeral. Hovering a row tints it sage, turns the date sage and nudges an arrow in. Dates use tabular figures so they line up. On mobile, the date stacks above the title.</p>
+
+  <h3>Writing: post list</h3>
+  <div class="demo flush">
+    <div class="section-head" style="margin-top:0"><h2><span class="num">ii.</span>Writing</h2><a href="#components">Archive →</a></div>
+    <ul class="dated">
+      <li><span class="date">Apr 12, 2026</span><div><a class="title" href="#components">On slowness in software <span class="arrow">→</span></a><span class="desc">Why the tools I trust most are the ones that never hurry me.</span></div></li>
+      <li><span class="date">Feb 03, 2026</span><div><a class="title" href="#components">Learning to read code like prose <span class="arrow">→</span></a><span class="desc">Notes from a month of reading other people's projects.</span></div></li>
+    </ul>
+  </div>
+
+  <h3>Article page</h3>
+  <div class="demo">
+    <h1 class="article-title">On slowness in software</h1>
+    <p class="article-meta">April 12, 2026 · 6 min read</p>
+    <div class="measure">
+      <p class="dropcap">The tools I return to most are the quiet ones. They open quickly, do one thing well, and never ask me to hurry. This essay is about why that matters and how to build software with the same patience.<sup><a href="#components">1</a></sup></p>
+      <h3 style="margin-top:var(--s-6)">A smaller heading inside a post</h3>
+      <p>Links inside prose look <a href="#components">like this</a>: sage text with a soft underline, and on hover a sage highlight sweeps up behind the word. Inline code looks like <code>npm run build</code>.</p>
+      <span class="sidenote">A sidenote: a small aside that feels like a note scribbled in the margin.</span>
+      <blockquote>Simplicity is about subtracting the obvious and adding the meaningful.<cite>John Maeda</cite></blockquote>
+      <pre><code>function slow(task) {
+  return task.done ? task : wait(task);
+}</code></pre>
+      <figure><div class="img" style="height:160px;background:linear-gradient(160deg,#e9e2d5,#d4cab8)" role="img" aria-label="Image placeholder"></div><figcaption>A caption sits under the image, small and italic.</figcaption></figure>
+      <div class="callout"><span class="label">Note</span>A callout uses the sage tint with 12px corners and a small leaf icon. It's the calm replacement for v1's orange footnote box.</div>
+      <hr>
+      <div class="tags"><a class="tag" href="#components">software</a><a class="tag" href="#components">craft</a><a class="tag" href="#components">essays</a></div>
+    </div>
+  </div>
+
+  <h3>Personality details</h3>
+  <div class="demo">
+    <table>
+      <tr><th style="width:42%">Detail</th><th>Example</th></tr>
+      <tr><td>Sage dot after the name</td><td><a class="wordmark" href="#components">Your Name</a></td></tr>
+      <tr><td>Highlighter mark</td><td>I like <span class="mark">small, careful tools</span>.</td></tr>
+      <tr><td>Squiggle underline</td><td><em class="squiggle" style="color:var(--c-sage)">Tinkerer</em></td></tr>
+      <tr><td>"Currently" status</td><td><span class="now" style="margin:0"><span class="dot"></span>Reading Middlemarch</span></td></tr>
+      <tr><td>Section numerals</td><td><span style="font-style:italic;color:var(--c-sage-mid)">i. ii. iii.</span></td></tr>
+      <tr><td>Leaf divider</td><td><hr style="margin:6px 0;max-width:140px"></td></tr>
+      <tr><td>Reading progress bar</td><td>thin sage line at the very top. Scroll this page to see it</td></tr>
+      <tr><td>Sage text selection</td><td>select any text on this page</td></tr>
+    </table>
+  </div>
+  <p class="note">Rule of thumb: one or two of these per screen. The squiggle and highlighter are for the hero and key phrases only, never whole paragraphs.</p>
+
+  <h3>Feature band (forest)</h3>
+  <div class="band">
+    <h3>Letters from the desk</h3>
+    <p>An occasional note about what I'm building and reading. No more than once a month.</p>
+    <div style="display:flex;gap:var(--s-3);flex-wrap:wrap"><input type="email" placeholder="you@example.com" aria-label="Email for letters"><button type="button">Subscribe</button></div>
+  </div>
+  <p class="note">The one deep-green moment per page, used for a newsletter, a "currently working on" block or the footer. Never use more than one band plus the footer.</p>
+
+  <h3>Buttons &amp; form</h3>
+  <div class="demo" style="display:flex;gap:var(--s-3);flex-wrap:wrap;align-items:center">
+    <input type="email" placeholder="you@example.com" aria-label="Email for newsletter">
+    <button type="button">Subscribe</button>
+    <a class="btn btn-quiet" href="#components">Read the archive</a>
+  </div>
+  <p class="note">Use at most one sage primary button per view. Everything else uses the quiet outline style. Inputs get a soft sage glow on focus instead of a hard outline.</p>
+
+  <h3>Pagination</h3>
+  <div class="demo">
+    <nav class="pager" aria-label="Post navigation">
+      <a href="#components"><span class="lbl">Previous</span>Learning to read code like prose</a>
+      <a href="#components" style="text-align:right"><span class="lbl">Next</span>Notes on attention</a>
+    </nav>
+  </div>
+
+  <h3>Dividers</h3>
+  <div class="demo"><p style="margin:0">Between sections in an article, use the leaf:</p><hr style="margin:var(--s-5) 0"><p style="margin:0">Between structural blocks, use a hairline:</p><hr class="rule" style="margin:var(--s-4) 0 0"></div>
+
+  <h3>Footer</h3>
+  <div class="demo">
+    <footer class="site-footer" style="margin:0"><span><span class="sign">Made slowly, by hand.</span> © 2026 Your Name</span><nav aria-label="Footer"><a href="#components">GitHub</a><a href="#components">Email</a><a href="#components">RSS</a></nav></footer>
+  </div>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal">Chapter seven</p>
+  <h2 class="reveal">What changed from v1</h2>
+  <table class="compare">
+    <tr><th>Area</th><th>v1 (nadh.in)</th><th>v2</th></tr>
+    <tr><td>Background</td><td>white sheet on #f6f6f6</td><td>cream #faf7f1 on #f1ece3</td></tr>
+    <tr><td>Accent</td><td>#ff3300 orange</td><td>#557560 sage</td></tr>
+    <tr><td>Text</td><td>#333 neutral gray</td><td>#3d3a34 warm brown-black</td></tr>
+    <tr><td>Links</td><td>orange, no underline → black</td><td>sage + pale underline → deeper sage</td></tr>
+    <tr><td>Root size</td><td>23px, lh 1.5</td><td>21px, lh 1.65</td></tr>
+    <tr><td>Spacing</td><td>15px rhythm</td><td>8px base</td></tr>
+    <tr><td>Corners</td><td>3–5px</td><td>8 / 12 / 20px</td></tr>
+    <tr><td>Motion</td><td>none (except slideshow)</td><td>160–700ms soft ease-out</td></tr>
+    <tr><td>Personality</td><td>italic slogan, orange box</td><td>name dot, leaf dividers, highlighter, squiggle, status pill, forest footer</td></tr>
+    <tr><td>Contrast</td><td>accent and meta below AA</td><td>all readable text AA</td></tr>
+  </table>
+
+  <!-- ===================================================== -->
+  <p class="eyebrow reveal" id="tokens">Chapter eight</p>
+  <h2 class="reveal">Token file</h2>
+  <p class="measure">These values are also saved as real files next to this page. Load <code>tokens.css</code> first, then <code>v2.css</code> for the base styles and every component shown above.</p>
+<pre><code>&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap"&gt;
+&lt;link rel="stylesheet" href="design-system/tokens.css"&gt;
+&lt;link rel="stylesheet" href="design-system/v2.css"&gt;
+&lt;script src="design-system/v2.js" defer&gt;&lt;/script&gt;  &lt;!-- scroll reveal + progress bar --&gt;</code></pre>
+<pre><code>:root {
+  /* paper &amp; ink */
+  --c-canvas:#f1ece3; --c-paper:#faf7f1; --c-paper-2:#f4efe6;
+  --c-ink:#2b2a26;    --c-text:#3d3a34;  --c-muted:#6f6a60;
+  --c-faint:#9a9386;  --c-border:#e4ddd0; --c-border-2:#d6cdbd;
+
+  /* sage */
+  --c-sage:#557560; --c-sage-deep:#3b5745; --c-sage-mid:#7f9b87;
+  --c-sage-line:#a9c0ae; --c-sage-wash:#d9e5da; --c-sage-tint:#e6ede5;
+  --c-forest:#2f4637; --c-forest-ink:#eef2ea;
+
+  /* type */
+  --font-serif:"EB Garamond", Georgia, serif;
+  --fs-root:21px; --fs-display:2.25rem; --fs-h1:1.9rem;
+  --fs-h2:1.5rem; --fs-h3:1.25rem; --fs-small:.875rem; --fs-tiny:.78rem;
+  --lh-body:1.65; --lh-tight:1.25; --measure:34em;
+
+  /* space (8px base) */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+
+  /* shape &amp; layout */
+  --r-sm:8px; --r-md:12px; --r-lg:20px;
+  --container:960px; --gutter:96px;
+
+  /* motion */
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --dur-fast:160ms; --dur-base:260ms; --dur-slow:700ms;
+}</code></pre>
+
+  <footer class="site-footer">
+    <span><span class="sign">Made slowly, by hand.</span> Portfolio design system · v2.0 final · 2026</span>
+    <nav aria-label="Back"><a href="#top">Back to top ↑</a></nav>
+  </footer>
+</main>
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+})();
+(function () {
+  var bar = document.querySelector('.progress'); if (!bar) return;
+  var ticking = false;
+  function update() {
+    var max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrollY / max, 1) : 0) + ')';
+    ticking = false;
+  }
+  addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
+</script>
+</body>
+</html>

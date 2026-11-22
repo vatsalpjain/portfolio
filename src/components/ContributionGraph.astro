@@ -1,0 +1,185 @@
+---
+// Last-12-months GitHub contributions, drawn as an SVG at build time (decision 0007).
+// No JavaScript. Every number comes straight from GitHub; private work is labeled as such.
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../lib/format";
+
+interface Props {
+  calendar: CollectionEntry<"contributions">["data"];
+}
+const { calendar } = Astro.props;
+
+const CELL = 11;
+const GAP = 3;
+const STEP = CELL + GAP;
+const LEFT = 28; // room for weekday labels
+const TOP = 18; // room for month labels
+
+const weeks = calendar.weeks;
+const width = LEFT + weeks.length * STEP;
+const height = TOP + 7 * STEP;
+
+// A month label above the first week that starts in a new month.
+const months: { x: number; label: string }[] = [];
+let lastMonth = -1;
+weeks.forEach((week, i) => {
+  const first = week[0];
+  if (!first) return;
+  const m = new Date(`${first.date}T00:00:00Z`).getUTCMonth();
+  if (m !== lastMonth) {
+    if (i < weeks.length - 2) {
+      months.push({
+        x: LEFT + i * STEP,
+        label: new Date(`${first.date}T00:00:00Z`).toLocaleString("en-GB", {
+          month: "short",
+          timeZone: "UTC",
+        }),
+      });
+    }
+    lastMonth = m;
+  }
+});
+// Drop a label that would collide with the next one.
+const monthLabels = months.filter(
+  (m, i) => !months[i + 1] || months[i + 1].x - m.x >= STEP * 3,
+);
+
+const dayOfWeek = (date: string) => new Date(`${date}T00:00:00Z`).getUTCDay();
+
+const total = calendar.total.toLocaleString("en-GB");
+const privateNote =
+  calendar.privateCount > 0 ? ", including private repositories" : "";
+const label = `${total} contributions in the last year${privateNote}`;
+---
+
+<figure class="graph">
+  <div class="scroll">
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+      role="img"
+      aria-label={label}
+    >
+      {monthLabels.map((m) => (
+        <text x={m.x} y={11} class="lbl">
+          {m.label}
+        </text>
+      ))}
+      <text x="0" y={TOP + 1 * STEP + 9} class="lbl">
+        Mon
+      </text>
+      <text x="0" y={TOP + 3 * STEP + 9} class="lbl">
+        Wed
+      </text>
+      <text x="0" y={TOP + 5 * STEP + 9} class="lbl">
+        Fri
+      </text>
+      {weeks.map((week, wi) =>
+        week.map((day) => (
+          <rect
+            x={LEFT + wi * STEP}
+            y={TOP + dayOfWeek(day.date) * STEP}
+            width={CELL}
+            height={CELL}
+            rx="2.5"
+            class={`l${day.level}`}
+          >
+            <title>
+                {`${day.count === 0 ? "No" : day.count} contribution${day.count === 1 ? "" : "s"} on ${formatDate(new Date(`${day.date}T00:00:00Z`))}`}
+              </title>
+          </rect>
+        )),
+      )}
+    </svg>
+  </div>
+  <figcaption>
+    <span>
+      {label}.
+      {calendar.sample && (
+        <strong class="sample"> Sample data (local only).</strong>
+      )}
+    </span>
+    <span class="legend" aria-hidden="true">
+      Less
+      <i class="l0"></i>
+      <i class="l1"></i>
+      <i class="l2"></i>
+      <i class="l3"></i>
+      <i class="l4"></i>
+      More
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .graph {
+    margin: var(--s-6) 0 0;
+  }
+  .scroll {
+    overflow-x: auto;
+    /* Show the most recent weeks first on narrow screens. */
+    direction: rtl;
+    padding-bottom: 4px;
+  }
+  svg {
+    direction: ltr;
+    display: block;
+    max-width: none;
+    height: auto;
+  }
+  @media (min-width: 761px) {
+    svg {
+      width: 100%;
+    }
+  }
+  .lbl {
+    font-family: var(--font-serif);
+    font-size: 10px;
+    fill: var(--c-muted);
+  }
+  .l0 {
+    fill: #ece6da;
+    background: #ece6da;
+  }
+  .l1 {
+    fill: var(--c-sage-wash);
+    background: var(--c-sage-wash);
+  }
+  .l2 {
+    fill: var(--c-sage-line);
+    background: var(--c-sage-line);
+  }
+  .l3 {
+    fill: var(--c-sage-mid);
+    background: var(--c-sage-mid);
+  }
+  .l4 {
+    fill: var(--c-sage-deep);
+    background: var(--c-sage-deep);
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    margin-top: var(--s-3);
+    text-align: left;
+  }
+  .sample {
+    color: #8a5a3c;
+    font-weight: var(--fw-medium);
+    font-style: normal;
+  }
+  .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-style: normal;
+  }
+  .legend i {
+    width: 11px;
+    height: 11px;
+    border-radius: 2.5px;
+  }
+</style>

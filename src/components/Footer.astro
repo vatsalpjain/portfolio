@@ -1,0 +1,50 @@
+---
+import { site } from "../site.config";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <span>
+    <span class="sign">Made slowly, by hand.</span> © {year} {site.name}
+  </span>
+  <nav aria-label="Elsewhere">
+    <a href={`mailto:${site.links.email}`}>Email</a>
+    <a href={site.links.github}>GitHub</a>
+    <a href={site.links.linkedin}>LinkedIn</a>
+    <a href="/rss.xml">RSS</a>
+  </nav>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--s-9);
+    padding: var(--s-5) var(--s-6);
+    background: var(--c-forest);
+    border-radius: var(--r-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    font-size: var(--fs-small);
+    color: #cfdacf;
+  }
+  .sign {
+    font-style: italic;
+    color: #fff;
+  }
+  nav {
+    display: flex;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+  a {
+    color: #cfdacf;
+    text-decoration-color: #5e7a66;
+  }
+  a:hover {
+    color: #fff;
+    text-decoration-color: #fff;
+  }
+</style>

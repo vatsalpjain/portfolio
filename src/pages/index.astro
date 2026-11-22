@@ -1,0 +1,93 @@
+---
+// Home: intro → story so far → how I work (all from home.md) → recent work + graph → links.
+import { getCollection, getEntry, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NowPill from "../components/NowPill.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import ContributionGraph from "../components/ContributionGraph.astro";
+import EmptyState from "../components/EmptyState.astro";
+import { site } from "../site.config";
+
+const home = await getEntry("home", "home");
+if (!home) throw new Error("src/content/home.md is missing.");
+const { Content } = await render(home);
+
+const projects = (await getCollection("projects"))
+  .map((p) => p.data)
+  .sort((a, b) => b.pushedAt.getTime() - a.pushedAt.getTime());
+const recent = projects.slice(0, site.homeProjectCount);
+
+const calendar = (await getEntry("contributions", "calendar"))?.data;
+---
+
+<BaseLayout>
+  {home.data.now && <NowPill text={home.data.now} />}
+  <h1 class="tagline">{home.data.tagline}</h1>
+
+  <div class="prose measure intro">
+    <Content />
+  </div>
+
+  <SectionHead
+    num="i."
+    title="Recent work"
+    link={
+      projects.length > recent.length
+        ? { href: "/projects", label: "All projects" }
+        : undefined
+    }
+  />
+  {recent.length > 0 ? (
+    <div>
+      {recent.map((p) => (
+        <ProjectRow project={p} />
+      ))}
+    </div>
+  ) : (
+    <EmptyState title="No projects listed yet.">
+      <p>They'll appear here as I tag them on GitHub.</p>
+    </EmptyState>
+  )}
+  {calendar && <ContributionGraph calendar={calendar} />}
+
+  <SectionHead num="ii." title="Elsewhere" />
+  <ul class="elsewhere">
+    <li>
+      Email: <a href={`mailto:${site.links.email}`}>{site.links.email}</a>
+    </li>
+    <li>
+      GitHub: <a href={site.links.github}>@{site.github.username}</a>
+    </li>
+    <li>
+      LinkedIn:{" "}
+      <a href={site.links.linkedin}>
+        {new URL(site.links.linkedin).pathname.replace(/^\/|\/$/g, "")}
+      </a>
+    </li>
+  </ul>
+</BaseLayout>
+
+<style>
+  .tagline {
+    font-size: var(--fs-display);
+    font-style: italic;
+    font-weight: var(--fw-regular);
+    color: var(--c-ink);
+    line-height: 1.15;
+    margin: 0 0 var(--s-6);
+    letter-spacing: -0.01em;
+  }
+  .intro {
+    font-size: 1.05rem;
+  }
+  .elsewhere {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-4) 0 0;
+    color: var(--c-muted);
+  }
+  .elsewhere li {
+    margin-bottom: var(--s-2);
+  }
+</style>

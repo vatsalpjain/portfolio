@@ -1,0 +1,10 @@
+# Optional per-project overrides (decision 0003).
+# Projects come from public GitHub repos tagged "portfolio". Use this file only to
+# hide one, or to replace its GitHub description / README summary on this site.
+#
+# - name: WhyyTorch
+#   summary: A better one-paragraph summary than the README's first paragraph.
+#
+# - name: some-repo
+#   hide: true
+[]

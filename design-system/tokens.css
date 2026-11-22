@@ -1,0 +1,66 @@
+/* Portfolio design system v2.0 — tokens
+   Warm & editorial · EB Garamond · sage accent · light only
+   Reference: design-system-v2.html */
+
+:root {
+  /* ---------- Color: paper & ink ---------- */
+  --c-canvas:     #f1ece3;  /* the desk behind the sheet */
+  --c-paper:      #faf7f1;  /* main reading surface */
+  --c-paper-2:    #f4efe6;  /* raised/tinted areas: code, quotes, hover rows */
+  --c-ink:        #2b2a26;  /* headings */
+  --c-text:       #3d3a34;  /* body */
+  --c-muted:      #6f6a60;  /* dates, captions, meta (AA on paper) */
+  --c-faint:      #9a9386;  /* decorative only: ornaments, placeholder */
+  --c-border:     #e4ddd0;  /* hairlines */
+  --c-border-2:   #d6cdbd;  /* input borders, stronger rules */
+
+  /* ---------- Color: sage accent ---------- */
+  --c-sage:       #557560;  /* links, active nav, primary button (AA on paper) */
+  --c-sage-deep:  #3b5745;  /* hover / pressed */
+  --c-sage-mid:   #7f9b87;  /* ornaments, quote marks, drop cap, dividers */
+  --c-sage-line:  #a9c0ae;  /* resting link underline */
+  --c-sage-wash:  #d9e5da;  /* highlighter marks */
+  --c-sage-tint:  #e6ede5;  /* callouts, tags, selection */
+  --c-forest:     #2f4637;  /* deep band: footer, feature blocks */
+  --c-forest-ink: #eef2ea;  /* text on forest */
+
+  /* ---------- Type ---------- */
+  --font-serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --fs-root: 21px;          /* 19px ≤ 760px · 23px ≥ 1600px */
+  --fs-display: 2.25rem;    /* page titles */
+  --fs-h1: 1.9rem;
+  --fs-h2: 1.5rem;
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  --fs-small: .875rem;
+  --fs-tiny: .78rem;
+  --lh-body: 1.65;
+  --lh-tight: 1.25;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --measure: 34em;          /* ideal reading width, ~65 characters */
+
+  /* ---------- Space (8px base) ---------- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+
+  /* ---------- Shape ---------- */
+  --r-sm: 8px;              /* buttons, inputs, tags, inline code */
+  --r-md: 12px;             /* cards, callouts, code blocks, images */
+  --r-lg: 20px;             /* the paper sheet */
+  --r-full: 999px;          /* portrait */
+
+  /* ---------- Layout ---------- */
+  --container: 960px;
+  --gutter: 96px;           /* 20px on mobile */
+
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(.22, .61, .36, 1);   /* gentle ease-out */
+  --dur-fast: 160ms;        /* color, underline */
+  --dur-base: 260ms;        /* buttons, backgrounds */
+  --dur-slow: 700ms;        /* scroll reveal */
+}
+
+
+@media (min-width: 1600px) { :root { --fs-root: 23px; } }
+@media (max-width: 760px)  { :root { --fs-root: 19px; --gutter: 20px; --fs-display: 1.85rem; } }
